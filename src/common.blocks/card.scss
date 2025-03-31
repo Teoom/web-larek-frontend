@@ -60,6 +60,7 @@
     border-radius: 2.5rem;
     margin-bottom: 12px;
     color: $primary;
+    align-self: baseline;
 
     &_soft {
       background-color: $category1;
@@ -81,6 +82,6 @@
 
   }
   &__price {
-
+    margin-inline-end: auto;
   }
 }
