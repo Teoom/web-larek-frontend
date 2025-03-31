@@ -29,7 +29,7 @@ const appData = new AppState({}, events);
 
 const page = new Page(document.body, events);
 const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
-const basket = new Basket(cloneTemplate(basketTemplate), {onClick: () => { events.emit('formContacts:open')}});
+const basket = new Basket(cloneTemplate(basketTemplate), { onClick: () => { events.emit('formContacts:open') } });
 const order = new Order(cloneTemplate(orderTemplate), events);
 const contacts = new Contacts(cloneTemplate(contactsTempalte), events);
 
@@ -106,6 +106,11 @@ events.on('product:select', (data: { item: IProduct, card: PreviewCard }) => {
 
 
 events.on('basket:open', () => {
+    openBasket();
+
+})
+
+function openBasket() {
     const basketItems = appData.getBasketItems();
 
     if (basketItems.length) {
@@ -121,15 +126,13 @@ events.on('basket:open', () => {
     } else {
         modal.render({ content: basket.render({ total: appData.order.total, isActive: true, list: null }) })
     }
-
-})
-
+}
 
 events.on<{ id: string }>('basket:card-delete', ({ id }) => {
     appData.isSelected({ id, value: false });
     appData.setBasket(appData.catalog.find(catalogItem => catalogItem.id === id));
     page.counter = appData.getBasketItems().length;
-    events.emit("basket:open");
+    openBasket();
 })
 
 
@@ -173,22 +176,30 @@ events.on('form:change', ({ field, value }: { field: keyof IOrderForm | keyof IC
 
 events.on('order:submit', () => {
     contacts.reset();
-    appData.clearOrder(['email', 'phone']);
     modal.render({ content: contacts.render({ valid: false, errors: ["Укажите email и номер телефона"] }) });
 })
 
 
 events.on('contacts:submit', () => {
-    appData.setOrderItems();
-    
-    api.orderProdutcs(appData.order)
+    const showSuccess = (data: IOrderResult) => {
+        const succes = new Success(cloneTemplate(successTemplate), 'order-success', {
+            onClick: () => {
+                modal.close();
+            }
+        })
+
+        modal.render({ content: succes.render({ price: String(data.total) }) });
+    }
+
+    const order = appData.createOrderToPost();
+
+    api.orderProdutcs(order)
         .then(data => {
-            events.emit('order:succes', data);
+            showSuccess(data);
             appData.getBasketItems().forEach(basketItem => {
-                appData.isSelected({id: basketItem.id, value: false});
+                appData.isSelected({ id: basketItem.id, value: false });
             })
             appData.setBasket([]);
-            appData.clearOrder(['payment', 'address']);
             page.counter = 0;
         })
         .catch(err => {
@@ -196,16 +207,6 @@ events.on('contacts:submit', () => {
         })
 })
 
-
-events.on('order:succes', (data: IOrderResult) => {
-    const succes = new Success(cloneTemplate(successTemplate), 'order-success', {
-        onClick: () => {
-            modal.close();
-        }
-    })
-
-    modal.render({ content: succes.render({ price: String(data.total) }) });
-})
 
 
 api.getProductList()

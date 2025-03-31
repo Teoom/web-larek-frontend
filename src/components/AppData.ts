@@ -41,17 +41,18 @@ export interface IAppState {
     order: IOrder | null,
 }
 
+type PickIOrder = Pick<IOrder, 'email'| 'phone' | 'address' | 'payment' | 'total'>
+
 export class AppState extends Model<IAppState> {
     protected _basket: IBasketItem[] = [];
     protected _catalog: ProductItem[];;
     protected _preview: string | null;
-    protected _order: IOrder = {
+    protected _order: PickIOrder = {
         email: '',
         phone: '',
         address: '',
         payment: '',
         total: 0,
-        items: []
     }
     protected _formErrors: FormErrors = {};
 
@@ -65,10 +66,10 @@ export class AppState extends Model<IAppState> {
     }
 
 
-    setOrderItems() {
-        this._order.items = this._basket.map(item => item.id);
+    createOrderToPost(): IOrder {
+        const items = this._basket.map(item => item.id);
+        return {...this._order, items};
     }
-
 
     setCatalog(items: IProduct[]) {
         this._catalog = items.map(item => new ProductItem({ ...item, selected: false }, this.events))
@@ -106,11 +107,9 @@ export class AppState extends Model<IAppState> {
         return this._basket;
     }
 
-    clearOrder(keys: (keyof IOrder)[] = ["items", 'address', 'email', 'payment', 'phone', 'total']) {
+    clearOrder(keys: (keyof PickIOrder)[] = ['address', 'email', 'payment', 'phone', 'total']) {
         keys.forEach(key => {
-            if (key === "items") {
-                this._order[key] = [];
-            } else if (key === "total") {
+            if (key === "total") {
                 this._order[key] == 0
             } else {
                 this._order[key] = '';
@@ -118,14 +117,12 @@ export class AppState extends Model<IAppState> {
         })
     }
 
-    setOrderField<T extends keyof IOrder>(field: T, value: IOrder[T]) {
-        if (field === "items" && Array.isArray(this._order[field])) {
-            (this._order[field] as string[]).push(...value as string[]);
-        } else if (typeof value === "number") {
+    setOrderField<T extends keyof PickIOrder>(field: T, value: PickIOrder[T]) {
+        if (typeof value === "number") {
             this._order[field] = value;
         } else {
             this._order[field] = value;
-
+        
 
             if (this.validateOrder()) {
                 this.emitChanges('order:ready', this._order);
