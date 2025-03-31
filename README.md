@@ -45,16 +45,6 @@ npm run build
 yarn build
 ```
 
-<style>
-  .sub {
-  	background-color: #473F06;
-    color: #4EF16B;
-		padding: 5px;
-  }
-
-  .li {margin-bottom: 10px}
-  }
-</style>
 
 При реалзиации проекта WebLaker был применён следующий паттерн проектирования MVP.
 </br>
@@ -100,7 +90,6 @@ yarn build
 <ul>
 <li class="li"><mark class="sub">_catalog</mark> - представляет из себя массив объектов товара</li>
 <li class="li"><mark class="sub">_basket</mark> - представляет из себя массив товаров, добавленных в корзину</li>
-<li class="li"><mark class="sub">_preview</mark> - содержит индификатор выбранного товара</li>
 <li class="li"><mark class="sub">_order</mark> - объект с информацией о заказе</li>
 <li class="li"><mark class="sub">_formErrorsr</mark> - объект с информацией о неправильных заполненных полях форм</li> 
 </ul>
@@ -108,7 +97,7 @@ yarn build
 <ul>
 <li class="li"><mark class="sub">setCatalog</mark> - метод заполняет свойство _catalog данными о товарах и инициирует событие "card:render" </li>
 <li class="li"><mark class="sub">setBasket</mark> - метод заполняет и удаляет данные о товаре в свойстве _basket </li>
-<li class="li"><mark class="sub">setPreview</mark> - метод устсанвливает значение для свойства _preview и инициирует событие "preview:render"</li>
+<li class="li"><mark class="sub">setPreview</mark> - метод иинициирует событие "preview:render"</li>
 <li class="li"><mark class="sub">setOrderField</mark> - метод заполняет одно или несколько полей для свойства _order</li>
 <li class="li"><mark class="sub">setOrderItems</mark> - метод для  заполнения массва поля items свойства _order </li> 
 <li class="li"><mark class="sub">isSelected</mark> - метод проверяет выбран ли товар</li> 
@@ -123,6 +112,7 @@ yarn build
   <li class="li"><mark class="sub">order</mark>- геттер возвращает данные о заказе</li>
 </ul>
 </br>
+
 ## Слой ПРЕДСТАВЛЕНИЯ
 ### <mark class="sub">Класс Component</mark>
 Базоый абстрактный класс <mark class="sub">Component&lt;T&gt;</mark> предстовляет из себя родительский класс для создания классов предназначеных для пользователького интерфейса. Конструктор класса принимает один аргумент - container, который является html-элементом и является родительским контейнером для дочерних классов.
@@ -138,6 +128,8 @@ yarn build
   <li class="li"><mark class="sub">setImage</mark>- устанавливает для элемента картинку и текст для картинки</li>
   <li class="li"><mark class="sub">render</mark>- добавляет в текущий класс данные, после возвращает родительский контейнер</li>
 </ul>
+</br>
+
 ## Переиспользуемые классы-интерфейса
 ### <mark class="sub">Класс Modal</mark>
 Класс <mark class="sub">Model</mark> предназначен для отоброжения модальных окон. В конструторе принимает два аргумента: container - являющийся родительским элементом; events - экземпляр брокера-событий.
@@ -159,6 +151,7 @@ yarn build
 <li class="li"><mark class="sub">content</mark> - сеттер для установки html-элемена</li>
 </ul>
 </br>
+
 ### <mark class="sub">Класс Basket</mark>
 Класс <mark class="sub">Basket</mark> предназначен для отоброжения корзины в модальном окне. В конструторе принимает два аргумента: container - являющийся родительским элементом; events - экземпляр брокера-событий.
 Класс содержит следующие свойства:
@@ -174,6 +167,7 @@ yarn build
     <li class="li"><mark class="sub">isActive</mark> - сеттер, который отключает и включает кнопку</li>
 </ul>
 </br>
+
 ### <mark class="sub">Класс Form</mark>
 Класс <mark class="sub">Basket</mark> предназначен для отоброжения формы в модальном окне. В конструторе принимает два аргумента: container - являющийся родительским элементом; events - экземпляр брокера-событий.
 Класс содержит следующие свойства:
@@ -192,6 +186,7 @@ yarn build
     <li class="li"><mark class="sub">errors</mark> - заполняет элемент для отображения ошибок текстом </li>
 </ul>
 </br>
+
 ## Основные классы-представления
 ### <mark class="sub">Класс Page</mark>
 Класс <mark class="sub">Page</mark> предназначен для отоброжения общего интерфейса страницы. В конструторе принимается два аргумента: container - являющийся родительским элементом; events - экземпляр брокера-событий.
@@ -209,6 +204,7 @@ yarn build
     <li class="li"><mark class="sub">locked</mark> - устанавливает фиксировку страницы </li>
 </ul>
 </br>
+
 ### <mark class="sub">Класс CardItem</mark>
 Класс <mark class="sub">CardItem</mark> предназначен для отоброжения карточки товара. В конструторе принимается три аргумента: container - являющийся родительским элементом; blockName - имя селектора класса; events - экземпляр брокера-событий.
 Класс содержит следующие свойства:
@@ -226,6 +222,7 @@ yarn build
     <li class="li"><mark class="sub">price</mark> - устанавливает текст для элемента отображения цены товара</li>
 </ul>
 </br>
+
 ### <mark class="sub">Класс PreviewCard</mark>
 Класс <mark class="sub">PreviewCard</mark> предназначен для отоброжения карточек подробной информации о товаре. В конструторе принимает три аргумента: container - являющийся родительским элементом; blockName - имя селектора класса; events - экземпляр брокера-событий.
 Класс содержит следующие свойства:
@@ -239,6 +236,7 @@ yarn build
     <li class="li"><mark class="sub">isSelected</mark> - устаналивает текст на кнопке</li>
 </ul>
 </br>
+
 ### <mark class="sub">Класс BasketItemView</mark>
 Класс <mark class="sub">BasketItemView</mark> предназначен для отоброжения карточек внутри корзины. В конструторе принимается три аргумента: container - являющийся родительским элементом; blockName - имя селектора класса; events - экземпляр брокера-событий.
 <ul>
@@ -254,6 +252,7 @@ yarn build
     <li class="li"><mark class="sub">price</mark> - усанавливает текст для отображения цены товара </li>
 </ul>
 </br>
+
 ### <mark class="sub">Класс Order</mark>
 Класс <mark class="sub">Order</mark> предназначен для отоброжения формы c полями: выбор способа оплаты; адресс. В конструторе принимается два аргумента: container - являющийся родительским элементом; events - экземпляр брокера-событий.
 Класс содержит следующие свойства:
@@ -266,6 +265,7 @@ yarn build
      <li class="li"><mark class="sub">disabledButtons</mark> - устанавливает для кнопок исходное состояние</li>
 </ul>
 </br>
+
 ### <mark class="sub">Класс Contacts</mark>
 Класс <mark class="sub">Contacts</mark> предназначен для отоброжения формы c полями: email, номер телефона. В конструторе принимается два аргумента: container - являющийся родительским элементом; events - экземпляр брокера-событий.
 </br>
@@ -280,6 +280,7 @@ yarn build
 <ul>
      <li class="li"><mark class="sub">price</mark> - устанавливает текст для отображения итоговой суммы заказа </li>
 </ul>
+
 ## Слой ПРЕЗЕНТЕН
 Слой презентера не выделен в отдельный класс, размещён в основном скрипте приложения. Взаимодействие происходит за счёт брокера событий, который отслеживает измненения за данными и реагирует на них.
 <br>
@@ -308,6 +309,7 @@ yarn build
     <li class="li"><mark class="sub">modal:close</mark> - закрыть модальное окно </li>
 </ul>
 </br>
+
 ## Взаимодействие с сервером
 ### <mark class="sub">Класс LarekApi</mark>
 Классс <mark class="sub">LarekApi</mark> реализует взаимодействие с сервером для работы приложения. Содержит в себе базовый путь и путь доставки контента.
@@ -317,6 +319,7 @@ yarn build
     <li class="li"><mark class="sub">getProductItem</mark> - получает данные об одном товаре </li>
     <li class="li"><mark class="sub">orderProdutcs</mark> - отправляет на сервер информацию о заказе</li>
 </ul>
+
 ## Основные типы/интерфейсы
 <ul>
     <li class="li"><mark class="sub">ICategory</mark> - перечисление категории товара </li>
